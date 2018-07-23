@@ -4,7 +4,8 @@
 * 2018.5.9 新增跨平台数据类型定义
 * 2018.6.22 1 修改了TMyIp结构
 			2 TDeviceInfo结构IP和Port增加缺省值
-            3 并入GitHub进行版本管理
+			3 并入GitHub进行版本管理
+* 2018.7.9 增加FLASH相关结构
 ***********************************************************************/
 #ifndef COMMBASE_H
 #define COMMBASE_H
@@ -116,6 +117,29 @@ typedef struct{
 	String Bcast;
     u8 MAC[6];
 }TMyIp;
+
+typedef struct {   //iap start,run app
+  u16  Address;
+  char Cmd[16];
+  u16  chksum;
+}TIAPSigCmd;
+
+typedef struct { //erase  ,prog ack
+  u16  Address;
+  char Cmd[16];
+  u32  StaAdd;
+  u32  DatLen;
+  u16  chksum;
+}TFlashAddCmd;
+
+typedef struct { //prog
+  u16  Address;
+  char Cmd[16];
+  u32  StaAdd;
+  u32  DatLen;
+  u8   databuf[528*2];
+  u16  chksum;
+}TFlashProg;
 
 //通用系统参数结构
 typedef struct {
