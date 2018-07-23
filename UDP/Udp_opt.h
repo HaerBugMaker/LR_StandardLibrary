@@ -7,6 +7,11 @@
 * 18.4.28 IP获取函数支持获取MAC地址(SendArp)
 * 18.5.8  IP合法性判断函数BUG修复
 * 18.5.15 修改IP获取方法的127.0.0.1 BUG
+* 18.7.9  增加FLASH 读取数据打包函数
+* 18.7.16 1 增加u32和标准时间结构互相转换的函数
+		  2 增加flash下发打包函数
+		  3 修复了Rd Wr的若干在多包情况下的BUG
+* 18.7.17 增加IAP命令组包函数
 *********************************************************************/
 //---------------------------------------------------------------------------
 
@@ -24,10 +29,28 @@
 //------------------------------------------------------------------------------
 
 //设备标识
-char const EquIdStr[] = {"PractCommConfigData"};
+char const EquIdStr[] = {"LRNRF602ConfigData"};
 
 //设备包间隔
 enum TPkgIncrease{increase_1,increase_1024};
+
+//FLASH协议操作设备类型 外置芯片   CPU内部FLASH
+enum TFLASHType{        at45db16,  cpu};
+
+//u32和标准时间结构互相转换的时候用到的表
+const uint8_t CalibrationPpm[128]={0,1,2,3,4,5,6,7,8,9,10,10,11,12,13,14,15,16,17,\
+						 18,19,20,21,22,23,24,25,26,27,28,29,30,31,31,32,33,34,\
+						 35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,51,\
+						 52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,\
+						 70,71,72,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,\
+						 87,88,89,90,91,92,93,93,94,95,96,97,98,99,100,101,102,\
+						 103,104,105,106,107,108,109,110,111,112,113,113,114,\
+						 115,116,117,118,119,120,121};
+
+//			      1  2  3  4  5  6  7  8  9 10 11 12
+const u8 MonthDayTab[] =     {31,28,31,30,31,30,31,31,30,31,30,31};
+const u8 LeapMonthDayTab[] = {31,29,31,30,31,30,31,31,30,31,30,31};
+const u16 YearDayTab[] = {366,365,365,365};
 
 
 //------------------------------------------------------------------------------
@@ -62,6 +85,20 @@ void __fastcall PackPara_nonstruct(const void *data,size_t size,TBytes &AByte);
 //----------CAN报文协议--------------------
 //打包CAN报文
 void __fastcall PackCan(int address,int dp_len,int cmd,const void* dp,TBytes &AByte);
+
+//---------FLASH报文协议---------------------
+//要数据
+void __fastcall RdPara_FLASH(u16 Address,u32 StaAdd,u32 DatLen,std::vector<TBytes> &VC_TBytes);
+//写数据
+void __fastcall WrPara_FLASH(u16 Address,u32 StaAdd,u32 DatLen,const void* srcdata,std::vector<TBytes> &VC_TBytes);
+//IAP命令组包
+void __fastcall Pack_TIAPSigCmd(int naddress,const char* srccmd,TBytes &nabyte);
+
+//------------时间处理函数--------------------
+//标准时间结构转换为u32格式
+u32 RtcRealToBin(TSysTime * SDT);
+//u32格式的时间转换为标准时间格式
+TSysTime RtcBinToReal(u32 RtcCnt);
 //------------------------------------------------------------------------------
 
 #endif

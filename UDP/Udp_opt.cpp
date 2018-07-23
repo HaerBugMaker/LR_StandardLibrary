@@ -255,8 +255,7 @@ int __fastcall RdPara(int startpos, int paranum,std::vector<TBytes> &VC_TBytes,c
 	}
 	else{
 		pkgnum = paranum / 1024 + ((paranum % 1024) ? 1 : 0);
-		lastpkgnum = paranum % 1024;
-		if(lastpkgnum == 0) lastpkgnum = 1024;
+		lastpkgnum = paranum % 1024?paranum % 1024:1024;
 	}
 	//不考虑1024字节以上的包
 	for (jj=0; jj<pkgnum; jj++)
@@ -317,7 +316,7 @@ void __fastcall WrPara(int startpos, int paranum,const void* dp,std::vector<TByt
 	}
 	else{
 		pkgnum = paranum / 1024 + ((paranum % 1024) ? 1 : 0);
-		lastpkgnum = paranum % 1024;
+		lastpkgnum = paranum % 1024?paranum % 1024:1024;
 	}
 	//不考虑1024字节以上的包
 	for (jj=0; jj<pkgnum; jj++)
@@ -328,11 +327,11 @@ void __fastcall WrPara(int startpos, int paranum,const void* dp,std::vector<TByt
 		strcpy(UDPSysPara->IdentifyingCode,EquIdStr);
 		UDPSysPara->StartByte = 0xca;
 		UDPSysPara->CmdType = 0x10;
-		UDPSysPara->ParaStaAdd = startpos + jj;//*1024;
+		UDPSysPara->ParaStaAdd = startpos + jj*1024;
 		//最后一包就不是1024个了 是余数
 		if (jj == pkgnum-1) UDPSysPara->ParaNum = lastpkgnum;
 		else UDPSysPara->ParaNum = 1024;
-		memcpy(UDPSysPara->Para,dp,paranum);
+		memcpy(UDPSysPara->Para,reinterpret_cast<const char*>(dp)+jj*1024,UDPSysPara->ParaNum);
 
 		AByte.set_length(sizeof(TUDPSetParaConfirm) + UDPSysPara->ParaNum);
 		for (int i=AByte.Low; i<=AByte.High; i++){
@@ -366,7 +365,7 @@ int __fastcall WrPara(int startpos, int paranum,const void* dp,const char* EquId
 	}
 	else{
 		pkgnum = paranum / 1024 + ((paranum % 1024) ? 1 : 0);
-		lastpkgnum = paranum % 1024;
+		lastpkgnum = paranum % 1024?paranum % 1024:1024;
 	}
 	//不考虑1024字节以上的包
 	for (jj=0; jj<pkgnum; jj++)
@@ -377,11 +376,11 @@ int __fastcall WrPara(int startpos, int paranum,const void* dp,const char* EquId
 		strcpy(UDPSysPara->IdentifyingCode,EquIdStr);
 		UDPSysPara->StartByte = 0xca;
 		UDPSysPara->CmdType = 0x10;
-		UDPSysPara->ParaStaAdd = startpos + jj;//*1024;
+		UDPSysPara->ParaStaAdd = startpos + jj*1024;
 		//最后一包就不是1024个了 是余数
 		if (jj == pkgnum-1) UDPSysPara->ParaNum = lastpkgnum;
 		else UDPSysPara->ParaNum = 1024;
-		memcpy(UDPSysPara->Para,dp,paranum);
+		memcpy(UDPSysPara->Para,reinterpret_cast<const char*>(dp)+jj*1024,UDPSysPara->ParaNum);
 
 		AByte.set_length(sizeof(TUDPSetParaConfirm) + UDPSysPara->ParaNum);
 		for (int i=AByte.Low; i<=AByte.High; i++){
@@ -442,7 +441,7 @@ void __fastcall CtlPara(int startpos, int paranum,const void* dp,std::vector<TBy
 	}
 	else{
 		pkgnum = paranum / 1024 + ((paranum % 1024) ? 1 : 0);
-		lastpkgnum = paranum % 1024;
+		lastpkgnum = paranum % 1024?paranum % 1024:1024;
 	}
 	VC_TBytes.resize(pkgnum);
 	//不考虑1024字节以上的包
@@ -454,11 +453,11 @@ void __fastcall CtlPara(int startpos, int paranum,const void* dp,std::vector<TBy
 		strcpy(UDPSysPara->IdentifyingCode,EquIdStr);
 		UDPSysPara->StartByte = 0xca;
 		UDPSysPara->CmdType = 0x06;
-		UDPSysPara->ParaStaAdd = startpos + jj;//*1024;
+		UDPSysPara->ParaStaAdd = startpos + jj*1024;
 		//最后一包就不是1024个了 是余数
 		if (jj == pkgnum-1) UDPSysPara->ParaNum = lastpkgnum;
 		else UDPSysPara->ParaNum = 1024;
-		memcpy(UDPSysPara->Para,dp,paranum);
+		memcpy(UDPSysPara->Para,reinterpret_cast<const char*>(dp)+jj*1024,UDPSysPara->ParaNum);
 
 		AByte.set_length(sizeof(TUDPSetParaConfirm) + UDPSysPara->ParaNum);
 		for (int i=AByte.Low; i<=AByte.High; i++){
@@ -491,7 +490,7 @@ int __fastcall CtlPara(int startpos, int paranum,const char* dp,const char* EquI
 	}
 	else{
 		pkgnum = paranum / 1024 + ((paranum % 1024) ? 1 : 0);
-		lastpkgnum = paranum % 1024;
+		lastpkgnum = paranum % 1024?paranum % 1024:1024;
 	}
 	VC_TBytes.resize(pkgnum);
 	//不考虑1024字节以上的包
@@ -503,11 +502,11 @@ int __fastcall CtlPara(int startpos, int paranum,const char* dp,const char* EquI
 		strcpy(UDPSysPara->IdentifyingCode,EquIdStr);
 		UDPSysPara->StartByte = 0xca;
 		UDPSysPara->CmdType = 0x06;
-		UDPSysPara->ParaStaAdd = startpos + jj;//*1024;
+		UDPSysPara->ParaStaAdd = startpos + jj*1024;
 		//最后一包就不是1024个了 是余数
 		if (jj == pkgnum-1) UDPSysPara->ParaNum = lastpkgnum;
 		else UDPSysPara->ParaNum = 1024;
-		memcpy(UDPSysPara->Para,dp,paranum);
+		memcpy(UDPSysPara->Para,reinterpret_cast<const char*>(dp)+jj*1024,UDPSysPara->ParaNum);
 
 		AByte.set_length(sizeof(TUDPSetParaConfirm) + UDPSysPara->ParaNum);
 		for (int i=AByte.Low; i<=AByte.High; i++){
@@ -585,7 +584,205 @@ void __fastcall PackCan(int address,int dp_len,int cmd,const void* dp,TBytes &AB
 	}
 }
 //---------------------------------------------------------------------------
+/********************
+* FLASH协议要数据(528为单位)
+* Address   :   串口通讯时用的，是设备地址，网络时不关心
+* StaAdd    :   要擦除或编程的 FLASH 的绝对地址  操作45DB161时，以528为单位，操作CPU内部FLASH时，以1024为单位
+* DatLen    :   就是要操作的数据  操作45db16的时候不可以超过 528
+* VC_TBytes :   数据接口
+********************/
+void __fastcall RdPara_FLASH(u16 Address,u32 StaAdd,u32 DatLen,std::vector<TBytes> &VC_TBytes)
+{
+	VC_TBytes.clear();
+	u8 NetSBuf[200]{0x00};
 
+	int ii,reallen,jj;
+	int pkgnum,lastpkgnum;
+	if(DatLen == 0){
+		pkgnum = 1;
+		lastpkgnum = DatLen;
+	}
+	else{
+		pkgnum = DatLen / 528 + ((DatLen % 528) ? 1 : 0);
+		lastpkgnum = DatLen % 528;
+		if(lastpkgnum == 0) lastpkgnum = 528;
+	}
+
+	for (jj=0; jj<pkgnum; jj++)
+	{
+		TFlashAddCmd* pFlashAddCmd = reinterpret_cast<TFlashAddCmd*>(NetSBuf);
+		strcpy(pFlashAddCmd->Cmd,"FlashReadPage");   //命令
+		pFlashAddCmd->StaAdd = StaAdd + jj*528;      //起始地址
+
+
+		//最后一包就不是1024个了 是余数
+		if (jj == pkgnum-1) pFlashAddCmd->DatLen = lastpkgnum;
+		else pFlashAddCmd->DatLen = 528;
+
+		//计算校验和
+		u16 nchksum{0};
+		for(int i=0;i<sizeof(TFlashAddCmd) - 2;i++){
+			nchksum += NetSBuf[i];
+		}
+		pFlashAddCmd->chksum = nchksum;
+
+		//拷贝数据
+		TBytes nabyte;
+		nabyte.set_length(sizeof(TFlashAddCmd));
+		for(int i=0;i<sizeof(TFlashAddCmd);i++){
+			nabyte[i] = NetSBuf[i];
+		}
+		VC_TBytes.push_back(nabyte);
+	}
+}
+//---------------------------------------------------------------------------
+/********************
+* FLASH协议写数据(528为单位)
+* Address   :   串口通讯时用的，是设备地址，网络时不关心
+* StaAdd    :   要擦除或编程的 FLASH 的绝对地址  操作45DB161时，以528为单位，操作CPU内部FLASH时，以1024为单位
+* DatLen    :   就是要操作的数据  操作45db16的时候不可以超过 528
+* srcdata   :   需要写入的数据
+* VC_TBytes :   数据接口
+********************/
+void __fastcall WrPara_FLASH(u16 Address,u32 StaAdd,u32 DatLen,const void* srcdata,std::vector<TBytes> &VC_TBytes)
+{
+	VC_TBytes.clear();
+	u8 NetSBuf[1500]{0x00};
+
+	int ii,reallen,jj;
+	int pkgnum,lastpkgnum;
+	if(DatLen == 0){
+		pkgnum = 1;
+		lastpkgnum = DatLen;
+	}
+	else{
+		pkgnum = DatLen / 528 + ((DatLen % 528) ? 1 : 0);
+		lastpkgnum = DatLen % 528;
+		if(lastpkgnum == 0) lastpkgnum = 528;
+	}
+
+	for (jj=0; jj<pkgnum; jj++)
+	{
+		TFlashProg* pFlashAddProg = reinterpret_cast<TFlashProg*>(NetSBuf);
+		strcpy(pFlashAddProg->Cmd,"FlashWritePage");  //命令
+		pFlashAddProg->StaAdd = StaAdd + jj*528;      //起始地址
+
+
+		//最后一包就不是1024个了 是余数
+		if (jj == pkgnum-1) pFlashAddProg->DatLen = lastpkgnum;
+		else pFlashAddProg->DatLen = 528;
+		memcpy(pFlashAddProg->databuf,srcdata,pFlashAddProg->DatLen);
+
+
+		//计算校验和
+		u16 nchksum{0};
+		for(int i=0;i<sizeof(TFlashAddCmd) + pFlashAddProg->DatLen - 2;i++){
+			nchksum += NetSBuf[i];
+		}
+		pFlashAddProg->chksum = nchksum;
+
+		//拷贝数据
+		TBytes nabyte;
+		nabyte.set_length(sizeof(TFlashAddCmd) + pFlashAddProg->DatLen);
+		for(int i=0;i<nabyte.Length;i++){
+			nabyte[i] = NetSBuf[i];
+		}
+		VC_TBytes.push_back(nabyte);
+	}
+}
+//---------------------------------------------------------------------------
+/*****************
+* IAP命令组包
+* naddress   :   地址
+* srccmd     :   源数据
+* nabyte     :   数据接口
+*****************/
+void __fastcall Pack_TIAPSigCmd(int naddress,const char* srccmd,TBytes &nabyte)
+{
+    nabyte.set_length(0);
+	if(srccmd == nullptr) return;
+	char SBuf[100]{0x00};
+	TIAPSigCmd* pIAPSigCmd = reinterpret_cast<TIAPSigCmd*>(SBuf);
+	pIAPSigCmd->Address = naddress;       //地址
+	memcpy(pIAPSigCmd->Cmd,srccmd,16);    //指令
+	for(int i=0;i<sizeof(TIAPSigCmd)-2;i++){
+		pIAPSigCmd->chksum += SBuf[i];
+	}
+	nabyte.set_length(sizeof(TIAPSigCmd));
+	for(int i=0;i<sizeof(TIAPSigCmd);i++){
+		nabyte[i] = SBuf[i];
+	}
+}
+//---------------------------------------------------------------------------
+/******************************
+* 标准时间结构转换为u32格式
+* SDT      :     标准时间结构
+* 返回值   :     u32格式的时间
+******************************/
+u32 RtcRealToBin(TSysTime * SDT)
+{
+if(SDT == nullptr) return 0x00000000;
+u32 RtcCnt;
+ u32 days;
+ u8 i,j;
+//get days
+	days = (SDT->year >> 2) * 1461;
+	i = SDT->year % 4;
+	for (j=0;j<i;j++) days += YearDayTab[j];
+
+	if (i)
+		for (j=0;j<SDT->month - 1;j++) days += MonthDayTab[j];
+	else
+		for (j=0;j<SDT->month - 1;j++) days += LeapMonthDayTab[j];
+	days += SDT->date - 1;
+//get
+    RtcCnt = SDT->hour*3600 + SDT->min*60 + SDT->sec;
+	RtcCnt += (days * 86400);   //24*60*60
+	return(RtcCnt);
+}
+
+//---------------------------------------------------------------------------
+/******************************
+* u32格式的时间转换为标准时间格式
+* RtcCnt   :     u32格式的时间
+* 返回值   :     转换结果
+******************************/
+TSysTime RtcBinToReal(u32 RtcCnt)
+{
+ u32 days,time;
+ u8 i,j;
+ TSysTime nsdt;
+//get time
+	time = RtcCnt % 86400;
+	nsdt.hour = time / 3600;
+	time %= 3600;
+	nsdt.min = time / 60;
+	nsdt.sec = time % 60;
+//get date
+	days = RtcCnt / 86400;
+	time = days % 1461;
+	for (i=0;i<4;i++) {
+		if (time<YearDayTab[i]) break;
+		else time -= YearDayTab[i];
+	}
+	nsdt.year = (days / 1461) * 4 + i;
+
+	for (j=0;j<12;j++) {
+		if (i) {
+			if (time < MonthDayTab[j]) break;
+			else time -= MonthDayTab[j];
+		}
+		else {
+			if (time < LeapMonthDayTab[j]) break;
+			else time -= LeapMonthDayTab[j];
+		}
+	}
+	nsdt.month = j+1;
+	nsdt.date = time+1;
+	nsdt.weekday = (days + 6) % 7;
+	return nsdt;
+}
+//---------------------------------------------------------------------------
 
 
 
