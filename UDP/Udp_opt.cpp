@@ -98,10 +98,12 @@ int StrToMac6(const char* strtmp,u8 * dp1)
 ***************/
 void StrToMac6(const String &macstr,char mac[6])
 {
+	if(macstr.IsEmpty())
+		{throw Exception(L"MAC地址不可为空");}
 	std::unique_ptr<TStringList>sl(new TStringList);
 	sl->Delimiter = L'-';
 	sl->DelimitedText = macstr;
-	if((sl->Count!=6)||(macstr == L"")) throw String(L"不符合规范的MAC地址");
+	if((sl->Count!=6)||(macstr == L"")) throw Exception(L"不符合规范的MAC地址");
 	String strtmp;
 	for(int i=0;i<sl->Count;i++){
 		strtmp = L"0x" + sl->Strings[i];

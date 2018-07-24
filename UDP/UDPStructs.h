@@ -109,15 +109,6 @@ typedef struct { //can tran buf
   u8  CanDat[1200];
 }TCanTRDat;
 
-//软件的网络连接参数
-typedef struct{
-	String IpAddr;
-	int Port{0};
-	String Mask;
-	String Bcast;
-    u8 MAC[6];
-}TMyIp;
-
 typedef struct {   //iap start,run app
   u16  Address;
   char Cmd[16];
@@ -140,6 +131,15 @@ typedef struct { //prog
   u8   databuf[528*2];
   u16  chksum;
 }TFlashProg;
+
+//软件的网络连接参数
+typedef struct{
+	String IpAddr;
+	int Port{0};
+	String Mask;
+	String Bcast;
+    u8 MAC[6];
+}TMyIp;
 
 //通用系统参数结构
 typedef struct {
