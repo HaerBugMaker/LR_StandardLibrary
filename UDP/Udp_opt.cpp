@@ -673,7 +673,7 @@ void __fastcall WrPara_FLASH(u16 Address,u32 StaAdd,u32 DatLen,const void* srcda
 		//最后一包就不是1024个了 是余数
 		if (jj == pkgnum-1) pFlashAddProg->DatLen = lastpkgnum;
 		else pFlashAddProg->DatLen = 528;
-		memcpy(pFlashAddProg->databuf,srcdata,pFlashAddProg->DatLen);
+		memcpy(pFlashAddProg->databuf,reinterpret_cast<const char*>(srcdata)+jj*528,pFlashAddProg->DatLen);
 
 
 		//计算校验和
