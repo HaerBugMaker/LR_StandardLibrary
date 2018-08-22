@@ -15,6 +15,7 @@
 * 18.7.23 1 StrToMac6函数增加空地址判断
 		  2 StrToMac6抛出异常类型修改为Exception
 * 18.8.20 修复WrPara_Flash的一个BUG
+* 18.8.22 1 增加PackPara_StrToHexArr函数用于字符串和HEX数组的转换
 *********************************************************************/
 //---------------------------------------------------------------------------
 
@@ -85,6 +86,8 @@ void __fastcall SearchEqu(TBytes &AByte);
 void __fastcall CalibTime(TBytes &AByte);
 //非标准UDP结构体组包
 void __fastcall PackPara_nonstruct(const void *data,size_t size,TBytes &AByte);
+//特殊打包格式_将一串符合(aa bb cc dd格式的字符串转换为HEX数据)
+void __fastcall PackPara_StrToHexArr(const String &HexStr,TBytes &AByte);
 //----------CAN报文协议--------------------
 //打包CAN报文
 void __fastcall PackCan(int address,int dp_len,int cmd,const void* dp,TBytes &AByte);

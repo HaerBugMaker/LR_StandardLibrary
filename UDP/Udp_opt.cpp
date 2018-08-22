@@ -559,6 +559,24 @@ void __fastcall PackPara_nonstruct(const void *data,size_t size,TBytes &AByte)
 	}
 }
 //---------------------------------------------------------------------------
+/****************
+* 特殊打包格式_将一串符合(aa bb cc dd格式的字符串转换为HEX数据)
+* HexStr   :  源数据
+* AByte    :  数据接口
+****************/
+void __fastcall PackPara_StrToHexArr(const String &HexStr,TBytes &AByte)
+{
+	AByte.set_length(0);
+	std::unique_ptr<TStringList>sl(new TStringList);
+	sl->Delimiter = L' ';
+	sl->DelimitedText = HexStr;
+	int ii = sl->Count;
+	AByte.set_length(sl->Count);
+	for(int i=0;i<sl->Count;i++){
+		AByte[i] = StrToInt(L"0x" + sl->Strings[i]);
+	}
+}
+//---------------------------------------------------------------------------
 //打包CAN报文（不分包）
 /**************
 * address   装置地址
