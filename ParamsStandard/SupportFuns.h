@@ -5,6 +5,7 @@
  Git  版本记录
 * 2018.1.30 增加编辑框居右功能
 * 2018.5.3 修改异常抛出类型为标准Exception类型
+* 2018.9.26 修改标准传递参数为TLRParams防止可能出现的重名
 *********************/
 #ifndef SupportFunsH
 #define SupportFunsH
@@ -29,7 +30,7 @@ struct TClipDevice{
 * 带参打开设备参数结构
 * 2018.1.15版本
 *****************/
-struct TParams{
+struct TLRParams{
 	String AppIP;       //软件IP
 	String DeviceIP;    //设备IP
 	String ServerAppHwndName;  //窗体名字
