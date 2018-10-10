@@ -2,18 +2,19 @@ object configform: Tconfigform
   Left = 0
   Top = 0
   Caption = #36890#35759#37197#32622
-  ClientHeight = 226
-  ClientWidth = 639
+  ClientHeight = 266
+  ClientWidth = 418
   Color = clBtnFace
-  Font.Charset = DEFAULT_CHARSET
+  Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
-  Font.Name = 'Tahoma'
-  Font.Style = []
+  Font.Height = -13
+  Font.Name = #24494#36719#38597#40657
+  Font.Style = [fsBold]
   OldCreateOrder = False
+  Position = poMainFormCenter
   OnShow = FormShow
   PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 19
   object Image1: TImage
     Left = 8
     Top = 8
@@ -38,8 +39,8 @@ object configform: Tconfigform
       426082}
   end
   object Image2: TImage
-    Left = 407
-    Top = 8
+    Left = 8
+    Top = 190
     Width = 48
     Height = 48
     AutoSize = True
@@ -79,8 +80,8 @@ object configform: Tconfigform
     Height = 21
     BevelInner = bvNone
     BorderStyle = bsNone
-    EditLabel.Width = 48
-    EditLabel.Height = 13
+    EditLabel.Width = 52
+    EditLabel.Height = 19
     EditLabel.Caption = #23376#32593#25513#30721
     ReadOnly = True
     TabOrder = 1
@@ -92,15 +93,15 @@ object configform: Tconfigform
     Height = 21
     BevelInner = bvNone
     BorderStyle = bsNone
-    EditLabel.Width = 48
-    EditLabel.Height = 13
+    EditLabel.Width = 52
+    EditLabel.Height = 19
     EditLabel.Caption = #24191#25773#22320#22336
     ReadOnly = True
     TabOrder = 2
   end
   object BitBtn1: TBitBtn
-    Left = 461
-    Top = 176
+    Left = 280
+    Top = 204
     Width = 121
     Height = 42
     Caption = #20445#23384#36890#35759#37197#32622
@@ -239,19 +240,19 @@ object configform: Tconfigform
     Height = 21
     BevelInner = bvNone
     BorderStyle = bsNone
-    EditLabel.Width = 46
-    EditLabel.Height = 13
+    EditLabel.Width = 58
+    EditLabel.Height = 19
     EditLabel.Caption = 'MAC'#22320#22336
     ReadOnly = True
     TabOrder = 4
   end
   object DeviceIPLE: TLabeledEdit
-    Left = 461
-    Top = 35
+    Left = 62
+    Top = 211
     Width = 121
-    Height = 21
-    EditLabel.Width = 58
-    EditLabel.Height = 13
+    Height = 27
+    EditLabel.Width = 65
+    EditLabel.Height = 19
     EditLabel.Caption = #30446#26631#35774#22791'IP'
     TabOrder = 5
     Text = '192.168.0.30'
